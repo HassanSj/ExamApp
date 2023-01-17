@@ -1,9 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Navbar from "./Navbar";
 import Footer from "./Fotter";
 import SearchBar from "./SearchBar";
 import ListPage from "./Listing";
+import img from "../img/profile-img.jpg";
 import Modal from "./Modal";
+import Item from "./Item";
+import Post from "./Post";
+import Filter from "./Filter";
 function Home() {
   const state = ["State1", "State2", "State3", "State4", "State5"];
   const borough = ["Borough1", "Borough2", "Borough3", "Borough4", "Borough5"];
@@ -41,7 +45,7 @@ function Home() {
     {
       id: 2,
       Name: "Army Public School Cantt",
-      State: "Punjab",
+      State: "Sindh",
       Borough: "Rawalpindi",
       Staff: {
         CordinatorName: "Rao Kashan",
@@ -71,7 +75,7 @@ function Home() {
     {
       id: 3,
       Name: "Army Public School Fort ",
-      State: "Punjab",
+      State: "KPK",
       Borough: "Rawalpindi",
       Staff: {
         CordinatorName: "Rao Kashan",
@@ -101,7 +105,7 @@ function Home() {
     {
       id: 4,
       Name: "Army Public School Ordinance ",
-      State: "Punjab",
+      State: "Peshawar",
       Borough: "Rawalpindi",
       Staff: {
         CordinatorName: "Rao Kashan",
@@ -219,12 +223,23 @@ function Home() {
       },
     },
   ];
+
+  const [selectedState, setSelectedState] = useState();
   const [searchResults, setSearchResults] = useState([]);
 
   useEffect(() => {
     setSearchResults(data);
   }, []);
-
+  function getFilteredList() {
+    if (!selectedState) {
+      return data;
+    }
+    return data.filter((item) => item.State === selectedState);
+  }
+  var filteredList = useMemo(getFilteredList, [selectedState, data]);
+  function handleCategoryChange(event) {
+    setSelectedState(event.target.value);
+  }
   return (
     <>
       <header
@@ -242,11 +257,7 @@ function Home() {
                 <span className="d-none d-md-block dropdown-toggle ps-2">
                   K. Anderson
                 </span>
-                <img
-                  src="asets/img/profile-img.jpg"
-                  alt="Profile"
-                  className="rounded-circle"
-                />{" "}
+                <img src={img} alt="Profile" className="rounded-circle" />{" "}
               </a>
 
               <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
@@ -333,13 +344,13 @@ function Home() {
                   All
                 </li>
                 <select>
-                  {borough.map((option, index) => {
-                    return <option key={index}>{option}</option>;
+                  {data.map((option, index) => {
+                    return <option key={index}>{option.Borough}</option>;
                   })}
                 </select>
-                <select>
-                  {state.map((option, index) => {
-                    return <option key={index}>{option}</option>;
+                <select onChange={handleCategoryChange}>
+                  {data.map((option, index) => {
+                    return <option key={index}>{option.State}</option>;
                   })}
                 </select>
               </ul>
@@ -374,8 +385,13 @@ function Home() {
           <div className="row">
             <div className="col-lg-12">
               <div className="row portfolio-container">
-                <ListPage searchResults={searchResults} />
-
+                {selectedState ? (
+                  filteredList.map((element, index) => (
+                    <Filter {...element} key={index} />
+                  ))
+                ) : (
+                  <ListPage searchResults={searchResults} />
+                )}
                 {/* <div className="col-lg-4 col-6 portfolio-item filter-waiting">
                   <ListPage searchResults={searchResults} />
                 </div>
@@ -524,6 +540,11 @@ function Home() {
             </div>
           </div>
         </div>
+        {/* <div className="sport-list">
+          {filteredList.map((element, index) => (
+            <Filter {...element} key={index} />
+          ))}
+        </div> */}
       </main>
 
       <Footer />

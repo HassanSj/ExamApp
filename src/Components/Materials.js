@@ -1,5 +1,6 @@
 import React from "react";
 import Navbar from "./Navbar";
+import img from "../img/profile-img.jpg";
 function Materials() {
   return (
     <>
@@ -18,11 +19,7 @@ function Materials() {
                 <span className="d-none d-md-block dropdown-toggle ps-2">
                   K. Anderson
                 </span>
-                <img
-                  src="assets/img/profile-img.jpg"
-                  alt="Profile"
-                  className="rounded-circle"
-                />
+                <img src={img} alt="Profile" className="rounded-circle" />
               </a>
 
               <ul className="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
