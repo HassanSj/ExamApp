@@ -1,21 +1,42 @@
 import React, { useState, useEffect, useMemo } from "react";
 import Navbar from "./Navbar";
-import Footer from "./Fotter";
+import Footer from "./Footer";
 import SearchBar from "./SearchBar";
-import ListPage from "./Listing";
+import SchoolCard from "./Listing";
 import img from "../img/profile-img.jpg";
 import Modal from "./Modal";
 import Item from "./Item";
 import Post from "./Post";
 import Filter from "./Filter";
 function Home() {
-  const state = ["State1", "State2", "State3", "State4", "State5"];
+  const state = [
+    {
+      id: 1,
+      statename: "Punjab",
+    },
+    {
+      id: 2,
+      statename: "Sindh",
+    },
+    {
+      id: 3,
+      statename: "KPK",
+    },
+    {
+      id: 4,
+      statename: "Islamabad",
+    },
+  ];
   const borough = ["Borough1", "Borough2", "Borough3", "Borough4", "Borough5"];
   const data = [
     {
       id: 1,
       Name: "Army Public ",
-      State: "Punjab",
+
+      State: {
+        Sid: 1,
+        SName: "Punjab",
+      },
       Borough: "Rawalpindi",
       Staff: {
         CordinatorName: "Rao Kashan",
@@ -45,8 +66,11 @@ function Home() {
     {
       id: 2,
       Name: "Army Public School Cantt",
-      State: "Sindh",
-      Borough: "Rawalpindi",
+      State: {
+        Sid: 2,
+        SName: "Sindh",
+      },
+      Borough: "Lahore",
       Staff: {
         CordinatorName: "Rao Kashan",
         TeacherName: "Mr.Ali",
@@ -75,8 +99,11 @@ function Home() {
     {
       id: 3,
       Name: "Army Public School Fort ",
-      State: "KPK",
-      Borough: "Rawalpindi",
+      State: {
+        Sid: 3,
+        SName: "KPK",
+      },
+      Borough: "Karachi",
       Staff: {
         CordinatorName: "Rao Kashan",
         TeacherName: "Mr.Ali",
@@ -105,7 +132,10 @@ function Home() {
     {
       id: 4,
       Name: "Army Public School Ordinance ",
-      State: "Peshawar",
+      State: {
+        Sid: 4,
+        SName: "Islamabad",
+      },
       Borough: "Rawalpindi",
       Staff: {
         CordinatorName: "Rao Kashan",
@@ -135,8 +165,11 @@ function Home() {
     {
       id: 5,
       Name: "Roots International ",
-      State: "Punjab",
-      Borough: "Rawalpindi",
+      State: {
+        Sid: 1,
+        SName: "Punjab",
+      },
+      Borough: "Lahore",
       Staff: {
         CordinatorName: "Rao Kashan",
         TeacherName: "Mr.Ali",
@@ -165,8 +198,11 @@ function Home() {
     {
       id: 6,
       Name: "BeaconHouse School",
-      State: "Punjab",
-      Borough: "Rawalpindi",
+      State: {
+        Sid: 1,
+        SName: "Punjab",
+      },
+      Borough: "Sialkot",
       Staff: {
         CordinatorName: "Rao Kashan",
         TeacherName: "Mr.Ali",
@@ -195,7 +231,10 @@ function Home() {
     {
       id: 7,
       Name: "SLS Montessori  ",
-      State: "Punjab",
+      State: {
+        Sid: 4,
+        SName: "Islamabad",
+      },
       Borough: "Rawalpindi",
       Staff: {
         CordinatorName: "Rao Kashan",
@@ -229,17 +268,30 @@ function Home() {
 
   useEffect(() => {
     setSearchResults(data);
-  }, []);
+  }, ["Data Filtered"]);
   function getFilteredList() {
     if (!selectedState) {
       return data;
     }
-    return data.filter((item) => item.State === selectedState);
+    return data.filter((item) => item.State.SName === selectedState);
   }
   var filteredList = useMemo(getFilteredList, [selectedState, data]);
   function handleCategoryChange(event) {
+    const mapEmployeeNames = () => {
+      data.map(function (employee) {
+        if (employee.State.SName === event.target.value) {
+          return employee.Borough;
+        }
+      });
+    };
+
+    console.log(mapEmployeeNames);
+    console.log(event.target.value);
     setSelectedState(event.target.value);
   }
+  const alldata = () => {
+    return searchResults;
+  };
   return (
     <>
       <header
@@ -340,19 +392,34 @@ function Home() {
           <div className="row">
             <div className="col-lg-4 d-flex">
               <ul id="portfolio-flters" className="d-flex align-items-center">
-                <li data-filter="*" className="filter-active">
-                  All
+                <button onClick={alldata}>All</button>
+                <li>
+                  <select
+                    id="inputState"
+                    class="form-select"
+                    onChange={handleCategoryChange}
+                  >
+                    {state.map((option, index) => {
+                      return <option key={index}>{option.statename}</option>;
+                    })}
+                  </select>
                 </li>
-                <select>
-                  {data.map((option, index) => {
-                    return <option key={index}>{option.Borough}</option>;
-                  })}
-                </select>
-                <select onChange={handleCategoryChange}>
-                  {data.map((option, index) => {
-                    return <option key={index}>{option.State}</option>;
-                  })}
-                </select>
+                <li>
+                  <select
+                    id="inputState"
+                    class="form-select"
+                    onChange={handleCategoryChange}
+                  >
+                    {data.map(function (employee) {
+                      if (employee.State.SName === selectedState) {
+                        return (
+                          <option key={employee}>{employee.Borough}</option>
+                        );
+                        return employee.Borough;
+                      }
+                    })}
+                  </select>
+                </li>
               </ul>
             </div>
             <div className="col-lg-3 d-flex">
@@ -370,13 +437,17 @@ function Home() {
                 </button>
               </div>
             </div>
-            <div className="col-lg-4 d-flex justify-content-end">
-              <ul
-                id="portfolio-flters"
-                className="waiting d-flex align-items-center"
-              >
-                <li data-filter=".filter-waiting">Show all waiting accounts</li>
-              </ul>
+            <div className="col-lg-4 d-flex  justify-content-end">
+              <div className="waiting d-flex align-items-center text-center">
+                <button
+                  type="button"
+                  className="btn btn-primary w-100"
+                  data-bs-toggle="modal"
+                  data-bs-target="#fullscreenModal"
+                >
+                  Show all waiting accounts
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -390,7 +461,7 @@ function Home() {
                     <Filter {...element} key={index} />
                   ))
                 ) : (
-                  <ListPage searchResults={searchResults} />
+                  <SchoolCard searchResults={searchResults} />
                 )}
                 {/* <div className="col-lg-4 col-6 portfolio-item filter-waiting">
                   <ListPage searchResults={searchResults} />

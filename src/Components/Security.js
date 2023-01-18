@@ -1,4 +1,4 @@
-import Footer from "./Fotter";
+import Footer from "./Footer";
 import Navbar from "./Navbar";
 import img from "../img/profile-img.jpg";
 function Security() {

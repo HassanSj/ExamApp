@@ -7,7 +7,7 @@ const Filter = ({ Name, State, Borough, Staff, Students }) => {
         <div className="member-info">
           <div className="top">
             <h4>{Name}</h4>
-            <span>{State}</span>
+            <span>{State.SName}</span>
             <span>{Borough}</span>
           </div>
           <div className="bottom">

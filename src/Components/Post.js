@@ -7,7 +7,7 @@ const Post = ({ data }) => {
         <div className="member-info">
           <div className="top">
             <h4>{data.Name}</h4>
-            <span>{data.State}</span>
+            <span>{data.State.SName}</span>
             <span>{data.Borough}</span>
           </div>
           <div className="bottom">
