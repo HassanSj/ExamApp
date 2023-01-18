@@ -5,7 +5,7 @@ import SearchBar from "./SearchBar";
 import SchoolCard from "./Listing";
 import img from "../img/profile-img.jpg";
 import Modal from "./Modal";
-import Item from "./Item";
+
 import Post from "./Post";
 import Filter from "./Filter";
 function Home() {
