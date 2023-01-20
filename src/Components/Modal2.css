@@ -1,0 +1,26 @@
+.modal-contents {
+  margin-left: -523px;
+  width: 1539px !important;
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  color: var(--bs-modal-color);
+  pointer-events: auto;
+  background-color: var(--bs-modal-bg);
+  background-clip: padding-box;
+  border: var(--bs-modal-border-width) solid var(--bs-modal-border-color);
+  border-radius: 24px !important;
+  outline: 0;
+  height: 864px !important;
+}
+.modal-bodys {
+  width: 1711px;
+  margin-left: -91px;
+  margin-top: -82px;
+  position: relative;
+  flex: 1 1 auto;
+  /* padding: var(--bs-modal-padding); */
+  padding: 91px;
+}

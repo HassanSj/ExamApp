@@ -1,14 +1,38 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import SearchBar from "./SearchBar";
 import SchoolCard from "./Listing";
 import img from "../img/profile-img.jpg";
-import Modal from "./Modal";
-
-import Post from "./Post";
+import "./Modal3.css";
+import { Modal, Button, Form } from "react-bootstrap";
+import Container from "react-bootstrap/Container";
+import "./Modal.css";
 import Filter from "./Filter";
+
 function Home() {
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+  const name = useRef();
+  const statename = useRef();
+  const boroughname = useRef();
+  const coordinator = useRef();
+  const teacher = useRef();
+  const principle = useRef();
+  const subteacher = useRef();
+  const mobile = useRef();
+  const landline = useRef();
+  const firstactive = useRef();
+  const firstunactive = useRef();
+  const secondactive = useRef();
+  const secondunactive = useRef();
+  const thirdactive = useRef();
+  const thirdunactive = useRef();
+  const handleClick = () => {
+    alert("parent click");
+  };
   const state = [
     {
       id: 1,
@@ -28,7 +52,7 @@ function Home() {
     },
   ];
   const borough = ["Borough1", "Borough2", "Borough3", "Borough4", "Borough5"];
-  const data = [
+  const [data, setData] = useState([
     {
       id: 1,
       Name: "Army Public ",
@@ -261,10 +285,52 @@ function Home() {
         },
       },
     },
-  ];
+  ]);
 
   const [selectedState, setSelectedState] = useState();
+  const [selectedBorough, setSelectedBorough] = useState();
   const [searchResults, setSearchResults] = useState([]);
+  const [allResult, setallResult] = useState("All States");
+
+  const addSchool = () => {
+    const datareceive = [
+      {
+        Name: name.current.value,
+
+        State: {
+          SName: statename.current.value,
+        },
+        Borough: boroughname.current.value,
+        Staff: {
+          CordinatorName: coordinator.current.value,
+          TeacherName: teacher.current.value,
+          PrincipleName: principle.current.value,
+          SubTeacherName: subteacher.current.value,
+          Contact: {
+            Mobile: mobile.current.value,
+            LandLine: landline.current.value,
+          },
+        },
+        Students: {
+          FirstGrade: {
+            Active: firstactive.current.value,
+            UnActive: firstunactive.current.value,
+          },
+          SecondGrade: {
+            Active: secondactive.current.value,
+            UnActive: secondunactive.current.value,
+          },
+          ThirdGrade: {
+            Active: thirdactive.current.value,
+            UnActive: thirdunactive.current.value,
+          },
+        },
+      },
+    ];
+    setData((current) => [...current, data]);
+
+    console.log(datareceive);
+  };
 
   useEffect(() => {
     setSearchResults(data);
@@ -273,9 +339,21 @@ function Home() {
     if (!selectedState) {
       return data;
     }
+    //console.log(data.filter((item) => item.State.SName === selectedState));
     return data.filter((item) => item.State.SName === selectedState);
   }
   var filteredList = useMemo(getFilteredList, [selectedState, data]);
+  function getFilteredList2() {
+    if (!selectedBorough) {
+      return data;
+    }
+    console.log(data.filter((item) => item.Borough === selectedState));
+    return data.filter(
+      (item) =>
+        item.Borough === selectedBorough && item.State.SName === selectedState
+    );
+  }
+  var filteredList2 = useMemo(getFilteredList2, [selectedBorough, data]);
   function handleCategoryChange(event) {
     const mapEmployeeNames = () => {
       data.map(function (employee) {
@@ -289,9 +367,12 @@ function Home() {
     console.log(event.target.value);
     setSelectedState(event.target.value);
   }
-  const alldata = () => {
-    return searchResults;
-  };
+  function handleCategoryChange2(event) {
+    console.log(event.target.value);
+
+    setSelectedBorough(event.target.value);
+  }
+
   return (
     <>
       <header
@@ -392,13 +473,13 @@ function Home() {
           <div className="row">
             <div className="col-lg-4 d-flex">
               <ul id="portfolio-flters" className="d-flex align-items-center">
-                <button onClick={alldata}>All</button>
                 <li>
                   <select
                     id="inputState"
                     class="form-select"
                     onChange={handleCategoryChange}
                   >
+                    <option>{allResult}</option>
                     {state.map((option, index) => {
                       return <option key={index}>{option.statename}</option>;
                     })}
@@ -408,14 +489,11 @@ function Home() {
                   <select
                     id="inputState"
                     class="form-select"
-                    onChange={handleCategoryChange}
+                    onChange={handleCategoryChange2}
                   >
-                    {data.map(function (employee) {
+                    {data.map(function (employee, key) {
                       if (employee.State.SName === selectedState) {
-                        return (
-                          <option key={employee}>{employee.Borough}</option>
-                        );
-                        return employee.Borough;
+                        return <option key={key}>{employee.Borough}</option>;
                       }
                     })}
                   </select>
@@ -443,7 +521,7 @@ function Home() {
                   type="button"
                   className="btn btn-primary w-100"
                   data-bs-toggle="modal"
-                  data-bs-target="#fullscreenModal"
+                  data-bs-target="#exampleModal2"
                 >
                   Show all waiting accounts
                 </button>
@@ -456,13 +534,45 @@ function Home() {
           <div className="row">
             <div className="col-lg-12">
               <div className="row portfolio-container">
-                {selectedState ? (
+                {(() => {
+                  if (selectedState) {
+                    return filteredList.map((element, index) => (
+                      <Filter {...element} key={index} />
+                    ));
+                  } else {
+                    return (
+                      <SchoolCard
+                        handleClick={handleClick}
+                        searchResults={searchResults}
+                      />
+                    );
+                  }
+                })()}
+                {(() => {
+                  if (selectedBorough) {
+                    return filteredList2.map((element, index) => (
+                      <Filter {...element} key={index} />
+                    ));
+                  } else {
+                    return null;
+                  }
+                })()}
+                {/* {selectedState ? (
                   filteredList.map((element, index) => (
                     <Filter {...element} key={index} />
-                  ))
+                  )) ||
+                  selectedBorough ? (
+                    filteredList2.map((element, index) => (
+                      <Borough {...element} key={index} />
+                    ))
+                  )
                 ) : (
-                  <SchoolCard searchResults={searchResults} />
-                )}
+                  <SchoolCard
+                    handleClick={handleClick}
+                    searchResults={searchResults}
+                  />
+                )} */}
+
                 {/* <div className="col-lg-4 col-6 portfolio-item filter-waiting">
                   <ListPage searchResults={searchResults} />
                 </div>
@@ -539,84 +649,979 @@ function Home() {
           </div>
         </section>
 
-        <div
-          className="modal fade"
-          id="exampleModal"
-          tabindex="-1"
-          role="dialog"
-          aria-labelledby="exampleModalCenterTitle"
-          aria-hidden="true"
-        >
-          <div className="modal-dialog modal-dialog-centered" role="document">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title" id="exampleModalCenterTitle">
-                  Coordinator Information
-                </h5>
-                <button
-                  type="button"
-                  className="close"
-                  data-dismiss="modal"
-                  aria-label="Close"
-                >
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div className="modal-body">
-                <form>
-                  <div className="form-group">
-                    <label for="recipient-name" className="col-form-label">
-                      Name:
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="recipient-name"
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label for="recipient-name" className="col-form-label">
-                      State:
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="recipient-name"
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label for="recipient-name" className="col-form-label">
-                      Borough:
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="recipient-name"
-                    />
-                  </div>
-                </form>
-              </div>
-              <div className="modal-footer">
-                <button
-                  type="button"
-                  className="btn btn-danger"
-                  data-bs-dismiss="modal"
-                >
-                  Discard
-                </button>
-                <button type="button" className="btn btn-primary">
-                  Submt Detials
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
         {/* <div className="sport-list">
           {filteredList.map((element, index) => (
             <Filter {...element} key={index} />
           ))}
         </div> */}
       </main>
+      <div
+        className="modal fade"
+        id="exampleModal2"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="exampleModalCenterTitle"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-dialog-centered" role="document">
+          <div className="modal-contentz">
+            <div className="modal-header">
+              <h5 className="modal-title" id="exampleModalCenterTitle">
+                Waiting List
+              </h5>
+              <button
+                type="button"
+                className="close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-bodyz">
+              <div class="coordinator d-flex align-items-start justify-content-between">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th scope="col">Index</th>
+                      <th scope="col">Phone Number / ID</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">Payment Status</th>
+                      <th scope="col">Base Receipt</th>
+                      <th scope="col">Activation</th>
+                      <th scope="col">Payment Status</th>
+                      <th scope="col">Rehersal Receipt</th>
+                      <th scope="col">Activation</th>
+                      <th scope="col">Payment Status</th>
+                      <th scope="col">Notes Receipt</th>
+                      <th scope="col">Activation</th>
+                      <th scope="col">Payment Status</th>
+                      <th scope="col">Workshop Receipt</th>
+                      <th scope="col">Activation</th>
+                      <th scope="col">Payment Status</th>
+                      <th scope="col">Books Receipt</th>
+                      <th scope="col">Activation</th>
+                      <th scope="col">Delete</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>01 - tchr</td>
+                      <td>0307553355 / 218 202</td>
+                      <td>tchr Ahmed Abdelsamei Mohamed Mohamed Kheir</td>
+                      <td class="orange">Waiting</td>
+                      <td>
+                        <span
+                          data-bs-toggle="modal"
+                          data-bs-target="#largeModal"
+                        >
+                          Link
+                        </span>
+                      </td>
+                      <td>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      </td>
+                      <td>Off</td>
+                      <td>Off</td>
+                      <td>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      </td>
+                      <td>Off</td>
+                      <td>Off</td>
+                      <td>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      </td>
+                      <td>Off</td>
+                      <td>Off</td>
+                      <td>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      </td>
+                      <td>Off</td>
+                      <td>Off</td>
+                      <td>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      </td>
+                      <td class="red">Delete</td>
+                    </tr>
+                    <tr>
+                      <td>01 - tchr</td>
+                      <td>0307553355 / 218 202</td>
+                      <td>tchr Ahmed Abdelsamei Mohamed Mohamed Kheir</td>
+                      <td class="orange">Waiting</td>
+                      <td>
+                        <span
+                          data-bs-toggle="modal"
+                          data-bs-target="#largeModal"
+                        >
+                          Link
+                        </span>
+                      </td>
+                      <td>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      </td>
+                      <td>Off</td>
+                      <td>Off</td>
+                      <td>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      </td>
+                      <td>Off</td>
+                      <td>Off</td>
+                      <td>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      </td>
+                      <td>Off</td>
+                      <td>Off</td>
+                      <td>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      </td>
+                      <td>Off</td>
+                      <td>Off</td>
+                      <td>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      </td>
+                      <td class="red">Delete</td>
+                    </tr>
+                    <tr>
+                      <td>01 - tchr</td>
+                      <td>0307553355 / 218 202</td>
+                      <td>tchr Ahmed Abdelsamei Mohamed Mohamed Kheir</td>
+                      <td class="orange">Waiting</td>
+                      <td>
+                        <span
+                          data-bs-toggle="modal"
+                          data-bs-target="#largeModal"
+                        >
+                          Link
+                        </span>
+                      </td>
+                      <td>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      </td>
+                      <td>Off</td>
+                      <td>Off</td>
+                      <td>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      </td>
+                      <td>Off</td>
+                      <td>Off</td>
+                      <td>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      </td>
+                      <td>Off</td>
+                      <td>Off</td>
+                      <td>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      </td>
+                      <td>Off</td>
+                      <td>Off</td>
+                      <td>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      </td>
+                      <td class="red">Delete</td>
+                    </tr>
+                    <tr>
+                      <td>01 - tchr</td>
+                      <td>0307553355 / 218 202</td>
+                      <td>tchr Ahmed Abdelsamei Mohamed Mohamed Kheir</td>
+                      <td class="orange">Waiting</td>
+                      <td>
+                        <span
+                          data-bs-toggle="modal"
+                          data-bs-target="#largeModal"
+                        >
+                          Link
+                        </span>
+                      </td>
+                      <td>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      </td>
+                      <td>Off</td>
+                      <td>Off</td>
+                      <td>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      </td>
+                      <td>Off</td>
+                      <td>Off</td>
+                      <td>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      </td>
+                      <td>Off</td>
+                      <td>Off</td>
+                      <td>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      </td>
+                      <td>Off</td>
+                      <td>Off</td>
+                      <td>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      </td>
+                      <td class="red">Delete</td>
+                    </tr>
+                    <tr>
+                      <td>01 - tchr</td>
+                      <td>0307553355 / 218 202</td>
+                      <td>tchr Ahmed Abdelsamei Mohamed Mohamed Kheir</td>
+                      <td class="orange">Waiting</td>
+                      <td>
+                        <span
+                          data-bs-toggle="modal"
+                          data-bs-target="#largeModal"
+                        >
+                          Link
+                        </span>
+                      </td>
+                      <td>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      </td>
+                      <td>Off</td>
+                      <td>Off</td>
+                      <td>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      </td>
+                      <td>Off</td>
+                      <td>Off</td>
+                      <td>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      </td>
+                      <td>Off</td>
+                      <td>Off</td>
+                      <td>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      </td>
+                      <td>Off</td>
+                      <td>Off</td>
+                      <td>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      </td>
+                      <td class="red">Delete</td>
+                    </tr>
+                    <tr>
+                      <td>01 - tchr</td>
+                      <td>0307553355 / 218 202</td>
+                      <td>tchr Ahmed Abdelsamei Mohamed Mohamed Kheir</td>
+                      <td class="orange">Waiting</td>
+                      <td>
+                        <span
+                          data-bs-toggle="modal"
+                          data-bs-target="#largeModal"
+                        >
+                          Link
+                        </span>
+                      </td>
+                      <td>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      </td>
+                      <td>Off</td>
+                      <td>Off</td>
+                      <td>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      </td>
+                      <td>Off</td>
+                      <td>Off</td>
+                      <td>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      </td>
+                      <td>Off</td>
+                      <td>Off</td>
+                      <td>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      </td>
+                      <td>Off</td>
+                      <td>Off</td>
+                      <td>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      </td>
+                      <td class="red">Delete</td>
+                    </tr>
+                    <tr>
+                      <td>01 - tchr</td>
+                      <td>0307553355 / 218 202</td>
+                      <td>tchr Ahmed Abdelsamei Mohamed Mohamed Kheir</td>
+                      <td class="orange">Waiting</td>
+                      <td>
+                        <span
+                          data-bs-toggle="modal"
+                          data-bs-target="#largeModal"
+                        >
+                          Link
+                        </span>
+                      </td>
+                      <td>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      </td>
+                      <td>Off</td>
+                      <td>Off</td>
+                      <td>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      </td>
+                      <td>Off</td>
+                      <td>Off</td>
+                      <td>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      </td>
+                      <td>Off</td>
+                      <td>Off</td>
+                      <td>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      </td>
+                      <td>Off</td>
+                      <td>Off</td>
+                      <td>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      </td>
+                      <td class="red">Delete</td>
+                    </tr>
+                    <tr>
+                      <td>01 - tchr</td>
+                      <td>0307553355 / 218 202</td>
+                      <td>tchr Ahmed Abdelsamei Mohamed Mohamed Kheir</td>
+                      <td class="orange">Waiting</td>
+                      <td>
+                        <span
+                          data-bs-toggle="modal"
+                          data-bs-target="#largeModal"
+                        >
+                          Link
+                        </span>
+                      </td>
+                      <td>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      </td>
+                      <td>Off</td>
+                      <td>Off</td>
+                      <td>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      </td>
+                      <td>Off</td>
+                      <td>Off</td>
+                      <td>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      </td>
+                      <td>Off</td>
+                      <td>Off</td>
+                      <td>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      </td>
+                      <td>Off</td>
+                      <td>Off</td>
+                      <td>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      </td>
+                      <td class="red">Delete</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="coordinator deleted-table mt-4 d-flex align-items-start justify-content-between">
+                <table class="table table-striped">
+                  <thead>
+                    <tr>
+                      <th scope="col" colspan="19">
+                        Deleted Accounts
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>01 - tchr</td>
+                      <td>0307553355 / 218 202</td>
+                      <td>tchr Ahmed Abdelsamei Mohamed Mohamed Kheir</td>
+                      <td class="orange">Waiting</td>
+                      <td>
+                        <span
+                          data-bs-toggle="modal"
+                          data-bs-target="#largeModal"
+                        >
+                          Link
+                        </span>
+                      </td>
+                      <td>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      </td>
+                      <td>Off</td>
+                      <td>Off</td>
+                      <td>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      </td>
+                      <td>Off</td>
+                      <td>Off</td>
+                      <td>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      </td>
+                      <td>Off</td>
+                      <td>Off</td>
+                      <td>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      </td>
+                      <td>Off</td>
+                      <td>Off</td>
+                      <td>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      </td>
+                      <td class="green">Restore</td>
+                    </tr>
+                    <tr>
+                      <td>01 - tchr</td>
+                      <td>0307553355 / 218 202</td>
+                      <td>tchr Ahmed Abdelsamei Mohamed Mohamed Kheir</td>
+                      <td class="orange">Waiting</td>
+                      <td>
+                        <span
+                          data-bs-toggle="modal"
+                          data-bs-target="#largeModal"
+                        >
+                          Link
+                        </span>
+                      </td>
+                      <td>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      </td>
+                      <td>Off</td>
+                      <td>Off</td>
+                      <td>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      </td>
+                      <td>Off</td>
+                      <td>Off</td>
+                      <td>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      </td>
+                      <td>Off</td>
+                      <td>Off</td>
+                      <td>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      </td>
+                      <td>Off</td>
+                      <td>Off</td>
+                      <td>
+                        <div class="form-check form-switch">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="flexSwitchCheckDefault"
+                          />
+                        </div>
+                      </td>
+                      <td class="green">Restore</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        className="modal fade"
+        id="exampleModal"
+        tabindex="-1"
+        role="dialog"
+        aria-labelledby="exampleModalCenterTitle"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-dialog-centered" role="document">
+          <div className="modal-contentx">
+            <div className="modal-header">
+              <h5 className="modal-title" id="exampleModalCenterTitle">
+                Coordinator Information
+              </h5>
+              <button
+                type="button"
+                className="close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              >
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div className="modal-bodyx">
+              <div className="form-groupx">
+                <label for="recipient-name" className="col-form-label">
+                  School Name
+                </label>
+                <input type="text" className="form-control" ref={name} />
+              </div>
+              <div className="form-groupx">
+                <label for="recipient-name" className="col-form-label">
+                  State
+                </label>
+                <input type="text" className="form-control" ref={statename} />
+              </div>
+              <div className="form-groupx">
+                <label for="recipient-name" className="col-form-label">
+                  Borough
+                </label>
+                <input type="text" className="form-control" ref={boroughname} />
+              </div>
+              <div className="form-groupx">
+                <label for="recipient-name" className="col-form-label">
+                  Coordinator Name
+                </label>
+                <input type="text" className="form-control" ref={coordinator} />
+              </div>
+              <div className="form-groupx">
+                <label for="recipient-name" className="col-form-label">
+                  Teacher Name
+                </label>
+                <input type="text" className="form-control" ref={teacher} />
+              </div>
+              <div className="form-groupx">
+                <label for="recipient-name" className="col-form-label">
+                  Principle Name
+                </label>
+                <input type="text" className="form-control" ref={principle} />
+              </div>
+              <div className="form-groupx">
+                <label for="recipient-name" className="col-form-label">
+                  SubTeacher Name
+                </label>
+                <input type="text" className="form-control" ref={subteacher} />
+              </div>
+              <div className="form-groupx">
+                <label for="recipient-name" className="col-form-label">
+                  LandLine
+                </label>
+                <input type="text" className="form-control" ref={landline} />
+              </div>
+              <div className="form-groupx">
+                <label for="recipient-name" className="col-form-label">
+                  Mobile
+                </label>
+                <input type="text" className="form-control" ref={mobile} />
+              </div>
+              <div class="form-row" style={{ display: "flex" }}>
+                <label
+                  for="recipient-name"
+                  className="col-form-label"
+                  style={{ marginLeft: "66px", marginTop: "22px" }}
+                >
+                  FirstGrade
+                </label>
+                <div
+                  style={{
+                    width: " 168px",
+                    marginTop: " 57px",
+                    height: " 52px",
+                    marginLeft: " -40px",
+                  }}
+                  class="form-group col-md-6"
+                >
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Active"
+                    ref={firstactive}
+                  />
+                </div>
+                <div
+                  style={{
+                    width: "181px",
+                    marginLeft: "32px",
+                    marginTop: "56px",
+                  }}
+                  class="form-group col-md-6"
+                >
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="UnActive"
+                    ref={firstunactive}
+                  />
+                </div>
+              </div>
+              <div
+                class="form-row"
+                style={{ display: "flex", marginTop: "-40px" }}
+              >
+                <label
+                  for="recipient-name"
+                  className="col-form-label"
+                  style={{ marginLeft: "66px", marginTop: "22px" }}
+                >
+                  SecondGrade
+                </label>
+                <div
+                  style={{
+                    width: " 168px",
+                    marginTop: " 57px",
+                    height: " 52px",
+                    marginLeft: " -55px",
+                  }}
+                  class="form-group col-md-6"
+                >
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Active"
+                    ref={secondactive}
+                  />
+                </div>
+                <div
+                  style={{
+                    width: "181px",
+                    marginLeft: "32px",
+                    marginTop: "56px",
+                  }}
+                  class="form-group col-md-6"
+                >
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="UnActive"
+                    ref={secondunactive}
+                  />
+                </div>
+              </div>
+              <div
+                class="form-row"
+                style={{ display: "flex", marginTop: "-45px" }}
+              >
+                <label
+                  for="recipient-name"
+                  className="col-form-label"
+                  style={{ marginLeft: "66px", marginTop: "22px" }}
+                >
+                  ThirdGrade
+                </label>
+                <div
+                  style={{
+                    width: " 168px",
+                    marginTop: " 57px",
+                    height: " 52px",
+                    marginLeft: " -44px",
+                  }}
+                  class="form-group col-md-6"
+                >
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Active"
+                    ref={thirdactive}
+                  />
+                </div>
+                <div
+                  style={{
+                    width: "181px",
+                    marginLeft: "32px",
+                    marginTop: "56px",
+                  }}
+                  class="form-group col-md-6"
+                >
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="UnActive"
+                    ref={thirdunactive}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="modal-footerx">
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={addSchool}
+              >
+                Submt Detials
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <Footer />
     </>

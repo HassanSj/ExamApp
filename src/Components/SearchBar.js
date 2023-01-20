@@ -7,7 +7,7 @@ const SearchBar = ({ data, setSearchResults }) => {
     const resultsArray = data.filter(
       (post) =>
         post.Name.includes(e.target.value) ||
-        post.State.includes(e.target.value) ||
+        post.State.SName.includes(e.target.value) ||
         post.Borough.includes(e.target.value)
     );
 

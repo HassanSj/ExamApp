@@ -5,6 +5,7 @@ import Coordinator from "./Components/Coordinator";
 import Materials from "./Components/Materials";
 import Reward from "./Components/Rewards";
 import Privacy from "./Components/Security";
+import Modals from "./Components/Modals.js";
 
 const Routers = () => {
   return (
@@ -16,6 +17,7 @@ const Routers = () => {
           <Route path="/materials" element={<Materials />} />
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/rewards" element={<Reward />} />
+          <Route path="/modal" element={<Modals />} />
         </Routes>
       </BrowserRouter>
     </div>
