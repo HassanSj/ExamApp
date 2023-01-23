@@ -1,11 +1,34 @@
-.item-container {
+/* .active {
+  color: red;
+} */
+
+.sidebar-nav .nav-link {
   display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 10px;
-  border: 1px solid black;
-}
-.item-label {
+  align-items: center;
+  font-size: 15px;
   font-weight: 600;
-  margin-right: 8px;
+  color: #12a42f;
+  transition: 0.3;
+  background: #f3fff3;
+  padding: 10px 15px 10px 60px;
+  border-radius: 4px;
+}
+
+.sidebar-nav .nav-link::before {
+  content: "";
+  background: #12a42f;
+  position: absolute;
+  left: 0px;
+  width: 4px;
+  display: block;
+  height: 24px;
+  z-index: 999;
+}
+.sidebar-nav .nav-link i {
+  font-size: 16px;
+  margin-right: 10px;
+  color: #12a42f;
+}
+.sidebar-nav .nav-link .icon path::before {
+  fill: #12a42f;
 }

@@ -347,7 +347,7 @@ function Home() {
     if (!selectedBorough) {
       return data;
     }
-    console.log(data.filter((item) => item.Borough === selectedState));
+
     return data.filter(
       (item) =>
         item.Borough === selectedBorough && item.State.SName === selectedState
@@ -536,19 +536,19 @@ function Home() {
               <div className="row portfolio-container">
                 {(() => {
                   if (selectedState) {
+                    if (selectedBorough) {
+                      return filteredList2.map((element, index) => (
+                        <Filter {...element} key={index} />
+                      ));
+                    }
                     return filteredList.map((element, index) => (
                       <Filter {...element} key={index} />
                     ));
                   } else {
-                    return (
-                      <SchoolCard
-                        handleClick={handleClick}
-                        searchResults={searchResults}
-                      />
-                    );
+                    return <SchoolCard searchResults={searchResults} />;
                   }
                 })()}
-                {(() => {
+                {/* {(() => {
                   if (selectedBorough) {
                     return filteredList2.map((element, index) => (
                       <Filter {...element} key={index} />
@@ -556,7 +556,7 @@ function Home() {
                   } else {
                     return null;
                   }
-                })()}
+                })()} */}
                 {/* {selectedState ? (
                   filteredList.map((element, index) => (
                     <Filter {...element} key={index} />

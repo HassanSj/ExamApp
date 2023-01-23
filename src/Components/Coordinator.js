@@ -1,7 +1,335 @@
-import React from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Navbar from "./Navbar";
 import img from "../img/profile-img.jpg";
+import CoordinatorCard from "./CoordinatorList";
+import CoordinatorFilter from "./CoordinatorFilter";
+import CoordinatorSearch from "./CordinatorSearch";
 function Coordinator() {
+  const state = [
+    {
+      id: 1,
+      statename: "Punjab",
+    },
+    {
+      id: 2,
+      statename: "Sindh",
+    },
+    {
+      id: 3,
+      statename: "KPK",
+    },
+    {
+      id: 4,
+      statename: "Islamabad",
+    },
+  ];
+  const [data, setData] = useState([
+    {
+      id: 1,
+      Name: "Army Public ",
+
+      State: {
+        Sid: 1,
+        SName: "Punjab",
+      },
+      Borough: "Rawalpindi",
+      Staff: {
+        CordinatorName: "Rao Kashan",
+        TeacherName: "Mr.Ali",
+        PrincipleName: "Mr.Bilal",
+        SubTeacherName: "Mr.Zayn",
+        Contact: {
+          Mobile: "03348983493",
+          LandLine: "0515255567",
+        },
+      },
+      Students: {
+        FirstGrade: {
+          Active: 30,
+          UnActive: 60,
+        },
+        SecondGrade: {
+          Active: 30,
+          UnActive: 60,
+        },
+        ThirdGrade: {
+          Active: 30,
+          UnActive: 60,
+        },
+      },
+      Wallet: 23150.21,
+      Record: "Records",
+      AllEarnings: 100231.32,
+      CashOut: 100232321.32,
+    },
+    {
+      id: 2,
+      Name: "Army Public School Cantt",
+      State: {
+        Sid: 2,
+        SName: "Sindh",
+      },
+      Borough: "Lahore",
+      Staff: {
+        CordinatorName: "Rao Kashan",
+        TeacherName: "Mr.Ali",
+        PrincipleName: "Mr.Bilal",
+        SubTeacherName: "Mr.Zayn",
+        Contact: {
+          Mobile: "03348983493",
+          LandLine: "0515255567",
+        },
+      },
+      Students: {
+        FirstGrade: {
+          Active: 30,
+          UnActive: 60,
+        },
+        SecondGrade: {
+          Active: 30,
+          UnActive: 60,
+        },
+        ThirdGrade: {
+          Active: 30,
+          UnActive: 60,
+        },
+      },
+      Wallet: 23150.21,
+      Record: "Records",
+      AllEarnings: 100231.32,
+      CashOut: 100232321.32,
+    },
+    {
+      id: 3,
+      Name: "Army Public School Fort ",
+      State: {
+        Sid: 3,
+        SName: "KPK",
+      },
+      Borough: "Karachi",
+      Staff: {
+        CordinatorName: "Rao Kashan",
+        TeacherName: "Mr.Ali",
+        PrincipleName: "Mr.Bilal",
+        SubTeacherName: "Mr.Zayn",
+        Contact: {
+          Mobile: "03348983493",
+          LandLine: "0515255567",
+        },
+      },
+      Students: {
+        FirstGrade: {
+          Active: 30,
+          UnActive: 60,
+        },
+        SecondGrade: {
+          Active: 30,
+          UnActive: 60,
+        },
+        ThirdGrade: {
+          Active: 30,
+          UnActive: 60,
+        },
+      },
+      Wallet: 90150.21,
+      Record: "Records",
+      AllEarnings: 12231.32,
+      CashOut: 199321.32,
+    },
+    {
+      id: 4,
+      Name: "Army Public School Ordinance ",
+      State: {
+        Sid: 4,
+        SName: "Islamabad",
+      },
+      Borough: "Rawalpindi",
+      Staff: {
+        CordinatorName: "Rao Kashan",
+        TeacherName: "Mr.Ali",
+        PrincipleName: "Mr.Bilal",
+        SubTeacherName: "Mr.Zayn",
+        Contact: {
+          Mobile: "03348983493",
+          LandLine: "0515255567",
+        },
+      },
+      Students: {
+        FirstGrade: {
+          Active: 30,
+          UnActive: 60,
+        },
+        SecondGrade: {
+          Active: 30,
+          UnActive: 60,
+        },
+        ThirdGrade: {
+          Active: 30,
+          UnActive: 60,
+        },
+      },
+      Wallet: 230.21,
+      Record: "Records",
+      AllEarnings: 90231.32,
+      CashOut: 1032321.32,
+    },
+    {
+      id: 5,
+      Name: "Roots International ",
+      State: {
+        Sid: 1,
+        SName: "Punjab",
+      },
+      Borough: "Lahore",
+      Staff: {
+        CordinatorName: "Rao Kashan",
+        TeacherName: "Mr.Ali",
+        PrincipleName: "Mr.Bilal",
+        SubTeacherName: "Mr.Zayn",
+        Contact: {
+          Mobile: "03348983493",
+          LandLine: "0515255567",
+        },
+      },
+      Students: {
+        FirstGrade: {
+          Active: 30,
+          UnActive: 60,
+        },
+        SecondGrade: {
+          Active: 30,
+          UnActive: 60,
+        },
+        ThirdGrade: {
+          Active: 30,
+          UnActive: 60,
+        },
+      },
+      Wallet: 230.21,
+      Record: "Records",
+      AllEarnings: 1002.32,
+      CashOut: 100221.32,
+    },
+    {
+      id: 6,
+      Name: "BeaconHouse School",
+      State: {
+        Sid: 1,
+        SName: "Punjab",
+      },
+      Borough: "Sialkot",
+      Staff: {
+        CordinatorName: "Rao Kashan",
+        TeacherName: "Mr.Ali",
+        PrincipleName: "Mr.Bilal",
+        SubTeacherName: "Mr.Zayn",
+        Contact: {
+          Mobile: "03348983493",
+          LandLine: "0515255567",
+        },
+      },
+      Students: {
+        FirstGrade: {
+          Active: 30,
+          UnActive: 60,
+        },
+        SecondGrade: {
+          Active: 30,
+          UnActive: 60,
+        },
+        ThirdGrade: {
+          Active: 30,
+          UnActive: 60,
+        },
+      },
+      Wallet: 3150.21,
+      Record: "Records",
+      AllEarnings: 200231.32,
+      CashOut: 1002321.32,
+    },
+    {
+      id: 7,
+      Name: "SLS Montessori  ",
+      State: {
+        Sid: 4,
+        SName: "Islamabad",
+      },
+      Borough: "Rawalpindi",
+      Staff: {
+        CordinatorName: "Rao Kashan",
+        TeacherName: "Mr.Ali",
+        PrincipleName: "Mr.Bilal",
+        SubTeacherName: "Mr.Zayn",
+        Contact: {
+          Mobile: "03348983493",
+          LandLine: "0515255567",
+        },
+      },
+      Students: {
+        FirstGrade: {
+          Active: 30,
+          UnActive: 60,
+        },
+        SecondGrade: {
+          Active: 30,
+          UnActive: 60,
+        },
+        ThirdGrade: {
+          Active: 30,
+          UnActive: 60,
+        },
+      },
+      Wallet: 150.21,
+      Record: "Records",
+      AllEarnings: 100231.32,
+      CashOut: 100232321.32,
+    },
+  ]);
+  const [selectedState, setSelectedState] = useState();
+  const [selectedBorough, setSelectedBorough] = useState();
+  const [searchResults, setSearchResults] = useState([]);
+  const [allResult, setallResult] = useState("All States");
+
+  useEffect(() => {
+    setSearchResults(data);
+  }, ["Data Filtered"]);
+  function getFilteredList() {
+    if (!selectedState) {
+      return data;
+    }
+    //console.log(data.filter((item) => item.State.SName === selectedState));
+    return data.filter((item) => item.State.SName === selectedState);
+  }
+  var filteredList = useMemo(getFilteredList, [selectedState, data]);
+  function getFilteredList2() {
+    if (!selectedBorough) {
+      return data;
+    }
+
+    return data.filter(
+      (item) =>
+        item.Borough === selectedBorough && item.State.SName === selectedState
+    );
+  }
+  var filteredList2 = useMemo(getFilteredList2, [selectedBorough, data]);
+  function handleCategoryChange(event) {
+    const mapEmployeeNames = () => {
+      data.map(function (employee) {
+        if (employee.State.SName === event.target.value) {
+          return employee.Borough;
+        }
+      });
+    };
+
+    console.log(mapEmployeeNames);
+    console.log(event.target.value);
+    setSelectedState(event.target.value);
+  }
+  function handleCategoryChange2(event) {
+    console.log(event.target.value);
+
+    setSelectedBorough(event.target.value);
+  }
   return (
     <>
       <header
@@ -102,30 +430,41 @@ function Coordinator() {
         <div className="page-tabs pagetitle">
           <div className="row">
             <div className="col-lg-4 d-flex">
-              <ul id="portfolio-flters" className="d-flex align-items-center">
-                <li data-filter="*" className="filter-active">
-                  All
-                </li>
-                <li data-filter=".filter-state">State</li>
-                <li data-filter=".filter-borough">Borough</li>
-              </ul>
+              <div className="col-lg-4 d-flex">
+                <ul id="portfolio-flters" className="d-flex align-items-center">
+                  <li>
+                    <select
+                      id="inputState"
+                      class="form-select"
+                      onChange={handleCategoryChange}
+                    >
+                      <option>{allResult}</option>
+                      {state.map((option, index) => {
+                        return <option key={index}>{option.statename}</option>;
+                      })}
+                    </select>
+                  </li>
+                  <li>
+                    <select
+                      id="inputState"
+                      class="form-select"
+                      onChange={handleCategoryChange2}
+                    >
+                      {data.map(function (employee, key) {
+                        if (employee.State.SName === selectedState) {
+                          return <option key={key}>{employee.Borough}</option>;
+                        }
+                      })}
+                    </select>
+                  </li>
+                </ul>
+              </div>
             </div>
             <div className="col-lg-3 d-flex">
-              <form
-                className="search-form d-flex align-items-center"
-                method="POST"
-                action="#"
-              >
-                <input
-                  type="text"
-                  name="query"
-                  placeholder="Search"
-                  title="Enter search keyword"
-                />
-                <button type="submit" title="Search">
-                  <i className="bi bi-search"></i>
-                </button>
-              </form>
+              <CoordinatorSearch
+                data={data}
+                setSearchResults={setSearchResults}
+              />
             </div>
             <div className="col-lg-1 d-flex">
               <div className="add-button-form d-flex align-items-center">
@@ -183,743 +522,20 @@ function Coordinator() {
         <section className="section dashboard">
           <div className="row">
             <div className="col-lg-12">
-              <div className="col-12 portfolio-item filter-borough">
-                <div className="coordinator d-flex align-items-start justify-content-between">
-                  <table
-                    className="table table-striped"
-                    style={{ borderRadius: "10px" }}
-                  >
-                    <thead>
-                      <tr>
-                        <th scope="col">Index</th>
-                        <th scope="col">Phone Number / ID</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">State</th>
-                        <th scope="col">Borough</th>
-                        <th scope="col">Bankak</th>
-                        <th scope="col">Date Joined</th>
-                        <th scope="col">Milestone</th>
-                        <th scope="col">School</th>
-                        <th scope="col">Grade 1</th>
-                        <th scope="col">Grade 2</th>
-                        <th scope="col">Grade 3</th>
-                        <th scope="col">Total</th>
-                        <th scope="col">Current Wallet</th>
-                        <th scope="col">Records</th>
-                        <th scope="col">All earnings</th>
-                        <th scope="col">On going cash out</th>
-                        <th scope="col">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>01</td>
-                        <td>0307553355</td>
-                        <td>Ubaidullah</td>
-                        <td>Punjab</td>
-                        <td>Borough</td>
-                        <td>HBL</td>
-                        <td>23/12/2012</td>
-                        <td>300</td>
-                        <td>GovtboysSchool</td>
-                        <td>12\60</td>
-                        <td>21/50</td>
-                        <td>30/80</td>
-                        <td>63/180</td>
-                        <td>23150.21</td>
-                        <td>Records</td>
-                        <td>100231.32</td>
-                        <td>
-                          <span className="badge badge-warning"> 3210.23</span>
-                        </td>
-                        <td>
-                          <a href="#">
-                            <i className="bi bi-trash"></i>
-                          </a>
-                        </td>
-                      </tr>
-                    </tbody>
-                    <tfoot>
-                      <tr>
-                        <td colspan="7">
-                          <div className="progress">
-                            <div
-                              className="progress-bar pb-step"
-                              role="progressbar"
-                              style={{ width: "10%" }}
-                              aria-valuenow="10"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                            <div
-                              className="progress-bar pb-step"
-                              role="progressbar"
-                              style={{ width: "10%" }}
-                              aria-valuenow="10"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                            <div
-                              className="progress-bar pb-step"
-                              role="progressbar"
-                              style={{ width: "10%" }}
-                              aria-valuenow="10"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                            <div
-                              className="progress-bar pb-step"
-                              role="progressbar"
-                              style={{ width: "10%" }}
-                              aria-valuenow="10"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                            <div
-                              className="progress-bar pb-step"
-                              role="progressbar"
-                              style={{ width: "10%" }}
-                              aria-valuenow="10"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                            <div
-                              className="progress-bar pb-step"
-                              role="progressbar"
-                              style={{ width: "10%" }}
-                              aria-valuenow="10"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                            <div
-                              className="progress-bar pb-step"
-                              role="progressbar"
-                              style={{ width: "10%" }}
-                              aria-valuenow="10"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                            <div
-                              className="progress-bar pb-step"
-                              role="progressbar"
-                              style={{ width: "10%" }}
-                              aria-valuenow="10"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                            <div
-                              className="progress-bar pb-step bg-danger"
-                              role="progressbar"
-                              style={{ width: "10%" }}
-                              aria-valuenow="10"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                            <div
-                              className="progress-bar pb-step bg-warning"
-                              role="progressbar"
-                              style={{ width: "10%" }}
-                              aria-valuenow="10"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                          </div>
-                        </td>
-                      </tr>
-                    </tfoot>
-                  </table>
-                </div>
-              </div>
-
-              <div className="col-12 portfolio-item filter-borough">
-                <div className="coordinator d-flex align-items-start justify-content-between">
-                  <table
-                    className="table table-striped"
-                    style={{ borderRadius: "10px" }}
-                  >
-                    <thead>
-                      <tr>
-                        <th scope="col">Index</th>
-                        <th scope="col">Phone Number / ID</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">State</th>
-                        <th scope="col">Borough</th>
-                        <th scope="col">Bankak</th>
-                        <th scope="col">Date Joined</th>
-                        <th scope="col">Milestone</th>
-                        <th scope="col">School</th>
-                        <th scope="col">Grade 1</th>
-                        <th scope="col">Grade 2</th>
-                        <th scope="col">Grade 3</th>
-                        <th scope="col">Total</th>
-                        <th scope="col">Current Wallet</th>
-                        <th scope="col">Records</th>
-                        <th scope="col">All earnings</th>
-                        <th scope="col">On going cash out</th>
-                        <th scope="col">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>01</td>
-                        <td>0307553355</td>
-                        <td>Ubaidullah</td>
-                        <td>Punjab</td>
-                        <td>Borough</td>
-                        <td>HBL</td>
-                        <td>23/12/2012</td>
-                        <td>300</td>
-                        <td>GovtboysSchool</td>
-                        <td>12\60</td>
-                        <td>21/50</td>
-                        <td>30/80</td>
-                        <td>63/180</td>
-                        <td>23150.21</td>
-                        <td>Records</td>
-                        <td>100231.32</td>
-                        <td>
-                          <span className="badge badge-warning"> 3210.23</span>
-                        </td>
-                        <td>
-                          <a href="#">
-                            <i className="bi bi-trash"></i>
-                          </a>
-                        </td>
-                      </tr>
-                    </tbody>
-                    <tfoot>
-                      <tr>
-                        <td colspan="7">
-                          <div className="progress">
-                            <div
-                              className="progress-bar pb-step"
-                              role="progressbar"
-                              style={{ width: "10%" }}
-                              aria-valuenow="10"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                            <div
-                              className="progress-bar pb-step"
-                              role="progressbar"
-                              style={{ width: "10%" }}
-                              aria-valuenow="10"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                            <div
-                              className="progress-bar pb-step"
-                              role="progressbar"
-                              style={{ width: "10%" }}
-                              aria-valuenow="10"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                            <div
-                              className="progress-bar pb-step"
-                              role="progressbar"
-                              style={{ width: "10%" }}
-                              aria-valuenow="10"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                            <div
-                              className="progress-bar pb-step"
-                              role="progressbar"
-                              style={{ width: "10%" }}
-                              aria-valuenow="10"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                            <div
-                              className="progress-bar pb-step"
-                              role="progressbar"
-                              style={{ width: "10%" }}
-                              aria-valuenow="10"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                            <div
-                              className="progress-bar pb-step"
-                              role="progressbar"
-                              style={{ width: "10%" }}
-                              aria-valuenow="10"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                            <div
-                              className="progress-bar pb-step"
-                              role="progressbar"
-                              style={{ width: "10%" }}
-                              aria-valuenow="10"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                            <div
-                              className="progress-bar pb-step bg-danger"
-                              role="progressbar"
-                              style={{ width: "10%" }}
-                              aria-valuenow="10"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                            <div
-                              className="progress-bar pb-step bg-warning"
-                              role="progressbar"
-                              style={{ width: "10%" }}
-                              aria-valuenow="10"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                          </div>
-                        </td>
-                      </tr>
-                    </tfoot>
-                  </table>
-                </div>
-              </div>
-
-              <div className="col-12 portfolio-item filter-borough">
-                <div className="coordinator d-flex align-items-start justify-content-between">
-                  <table
-                    className="table table-striped"
-                    style={{ borderRadius: "10px" }}
-                  >
-                    <thead>
-                      <tr>
-                        <th scope="col">Index</th>
-                        <th scope="col">Phone Number / ID</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">State</th>
-                        <th scope="col">Borough</th>
-                        <th scope="col">Bankak</th>
-                        <th scope="col">Date Joined</th>
-                        <th scope="col">Milestone</th>
-                        <th scope="col">School</th>
-                        <th scope="col">Grade 1</th>
-                        <th scope="col">Grade 2</th>
-                        <th scope="col">Grade 3</th>
-                        <th scope="col">Total</th>
-                        <th scope="col">Current Wallet</th>
-                        <th scope="col">Records</th>
-                        <th scope="col">All earnings</th>
-                        <th scope="col">On going cash out</th>
-                        <th scope="col">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>01</td>
-                        <td>0307553355</td>
-                        <td>Ubaidullah</td>
-                        <td>Punjab</td>
-                        <td>Borough</td>
-                        <td>HBL</td>
-                        <td>23/12/2012</td>
-                        <td>300</td>
-                        <td>GovtboysSchool</td>
-                        <td>12\60</td>
-                        <td>21/50</td>
-                        <td>30/80</td>
-                        <td>63/180</td>
-                        <td>23150.21</td>
-                        <td>Records</td>
-                        <td>100231.32</td>
-                        <td>
-                          <span className="badge badge-warning"> 3210.23</span>
-                        </td>
-                        <td>
-                          <a href="#">
-                            <i className="bi bi-trash"></i>
-                          </a>
-                        </td>
-                      </tr>
-                    </tbody>
-                    <tfoot>
-                      <tr>
-                        <td colspan="7">
-                          <div className="progress">
-                            <div
-                              className="progress-bar pb-step"
-                              role="progressbar"
-                              style={{ width: "10%" }}
-                              aria-valuenow="10"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                            <div
-                              className="progress-bar pb-step"
-                              role="progressbar"
-                              style={{ width: "10%" }}
-                              aria-valuenow="10"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                            <div
-                              className="progress-bar pb-step"
-                              role="progressbar"
-                              style={{ width: "10%" }}
-                              aria-valuenow="10"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                            <div
-                              className="progress-bar pb-step"
-                              role="progressbar"
-                              style={{ width: "10%" }}
-                              aria-valuenow="10"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                            <div
-                              className="progress-bar pb-step"
-                              role="progressbar"
-                              style={{ width: "10%" }}
-                              aria-valuenow="10"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                            <div
-                              className="progress-bar pb-step"
-                              role="progressbar"
-                              style={{ width: "10%" }}
-                              aria-valuenow="10"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                            <div
-                              className="progress-bar pb-step"
-                              role="progressbar"
-                              style={{ width: "10%" }}
-                              aria-valuenow="10"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                            <div
-                              className="progress-bar pb-step"
-                              role="progressbar"
-                              style={{ width: "10%" }}
-                              aria-valuenow="10"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                            <div
-                              className="progress-bar pb-step bg-danger"
-                              role="progressbar"
-                              style={{ width: "10%" }}
-                              aria-valuenow="10"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                            <div
-                              className="progress-bar pb-step bg-warning"
-                              role="progressbar"
-                              style={{ width: "10%" }}
-                              aria-valuenow="10"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                          </div>
-                        </td>
-                      </tr>
-                    </tfoot>
-                  </table>
-                </div>
-              </div>
-              <div className="col-12 portfolio-item filter-borough">
-                <div className="coordinator d-flex align-items-start justify-content-between">
-                  <table
-                    className="table table-striped"
-                    style={{ borderRadius: "10px" }}
-                  >
-                    <thead>
-                      <tr>
-                        <th scope="col">Index</th>
-                        <th scope="col">Phone Number / ID</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">State</th>
-                        <th scope="col">Borough</th>
-                        <th scope="col">Bankak</th>
-                        <th scope="col">Date Joined</th>
-                        <th scope="col">Milestone</th>
-                        <th scope="col">School</th>
-                        <th scope="col">Grade 1</th>
-                        <th scope="col">Grade 2</th>
-                        <th scope="col">Grade 3</th>
-                        <th scope="col">Total</th>
-                        <th scope="col">Current Wallet</th>
-                        <th scope="col">Records</th>
-                        <th scope="col">All earnings</th>
-                        <th scope="col">On going cash out</th>
-                        <th scope="col">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>01</td>
-                        <td>0307553355</td>
-                        <td>Ubaidullah</td>
-                        <td>Punjab</td>
-                        <td>Borough</td>
-                        <td>HBL</td>
-                        <td>23/12/2012</td>
-                        <td>300</td>
-                        <td>GovtboysSchool</td>
-                        <td>12\60</td>
-                        <td>21/50</td>
-                        <td>30/80</td>
-                        <td>63/180</td>
-                        <td>23150.21</td>
-                        <td>Records</td>
-                        <td>100231.32</td>
-                        <td>
-                          <span className="badge badge-warning"> 3210.23</span>
-                        </td>
-                        <td>
-                          <a href="#">
-                            <i className="bi bi-trash"></i>
-                          </a>
-                        </td>
-                      </tr>
-                    </tbody>
-                    <tfoot>
-                      <tr>
-                        <td colspan="7">
-                          <div className="progress">
-                            <div
-                              className="progress-bar pb-step"
-                              role="progressbar"
-                              style={{ width: "10%" }}
-                              aria-valuenow="10"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                            <div
-                              className="progress-bar pb-step"
-                              role="progressbar"
-                              style={{ width: "10%" }}
-                              aria-valuenow="10"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                            <div
-                              className="progress-bar pb-step"
-                              role="progressbar"
-                              style={{ width: "10%" }}
-                              aria-valuenow="10"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                            <div
-                              className="progress-bar pb-step"
-                              role="progressbar"
-                              style={{ width: "10%" }}
-                              aria-valuenow="10"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                            <div
-                              className="progress-bar pb-step"
-                              role="progressbar"
-                              style={{ width: "10%" }}
-                              aria-valuenow="10"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                            <div
-                              className="progress-bar pb-step"
-                              role="progressbar"
-                              style={{ width: "10%" }}
-                              aria-valuenow="10"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                            <div
-                              className="progress-bar pb-step"
-                              role="progressbar"
-                              style={{ width: "10%" }}
-                              aria-valuenow="10"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                            <div
-                              className="progress-bar pb-step"
-                              role="progressbar"
-                              style={{ width: "10%" }}
-                              aria-valuenow="10"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                            <div
-                              className="progress-bar pb-step bg-danger"
-                              role="progressbar"
-                              style={{ width: "10%" }}
-                              aria-valuenow="10"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                            <div
-                              className="progress-bar pb-step bg-warning"
-                              role="progressbar"
-                              style={{ width: "10%" }}
-                              aria-valuenow="10"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                          </div>
-                        </td>
-                      </tr>
-                    </tfoot>
-                  </table>
-                </div>
-              </div>
-              <div className="col-12 portfolio-item filter-borough">
-                <div className="coordinator d-flex align-items-start justify-content-between">
-                  <table
-                    className="table table-striped"
-                    style={{ borderRadius: "10px" }}
-                  >
-                    <thead>
-                      <tr>
-                        <th scope="col">Index</th>
-                        <th scope="col">Phone Number / ID</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">State</th>
-                        <th scope="col">Borough</th>
-                        <th scope="col">Bankak</th>
-                        <th scope="col">Date Joined</th>
-                        <th scope="col">Milestone</th>
-                        <th scope="col">School</th>
-                        <th scope="col">Grade 1</th>
-                        <th scope="col">Grade 2</th>
-                        <th scope="col">Grade 3</th>
-                        <th scope="col">Total</th>
-                        <th scope="col">Current Wallet</th>
-                        <th scope="col">Records</th>
-                        <th scope="col">All earnings</th>
-                        <th scope="col">On going cash out</th>
-                        <th scope="col">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>01</td>
-                        <td>0307553355</td>
-                        <td>Ubaidullah</td>
-                        <td>Punjab</td>
-                        <td>Borough</td>
-                        <td>HBL</td>
-                        <td>23/12/2012</td>
-                        <td>300</td>
-                        <td>GovtboysSchool</td>
-                        <td>12\60</td>
-                        <td>21/50</td>
-                        <td>30/80</td>
-                        <td>63/180</td>
-                        <td>23150.21</td>
-                        <td>Records</td>
-                        <td>100231.32</td>
-                        <td>
-                          <span className="badge badge-warning"> 3210.23</span>
-                        </td>
-                        <td>
-                          <a href="#">
-                            <i className="bi bi-trash"></i>
-                          </a>
-                        </td>
-                      </tr>
-                    </tbody>
-                    <tfoot>
-                      <tr>
-                        <td colspan="7">
-                          <div className="progress">
-                            <div
-                              className="progress-bar pb-step"
-                              role="progressbar"
-                              style={{ width: "10%" }}
-                              aria-valuenow="10"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                            <div
-                              className="progress-bar pb-step"
-                              role="progressbar"
-                              style={{ width: "10%" }}
-                              aria-valuenow="10"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                            <div
-                              className="progress-bar pb-step"
-                              role="progressbar"
-                              style={{ width: "10%" }}
-                              aria-valuenow="10"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                            <div
-                              className="progress-bar pb-step"
-                              role="progressbar"
-                              style={{ width: "10%" }}
-                              aria-valuenow="10"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                            <div
-                              className="progress-bar pb-step"
-                              role="progressbar"
-                              style={{ width: "10%" }}
-                              aria-valuenow="10"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                            <div
-                              className="progress-bar pb-step"
-                              role="progressbar"
-                              style={{ width: "10%" }}
-                              aria-valuenow="10"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                            <div
-                              className="progress-bar pb-step"
-                              role="progressbar"
-                              style={{ width: "10%" }}
-                              aria-valuenow="10"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                            <div
-                              className="progress-bar pb-step"
-                              role="progressbar"
-                              style={{ width: "10%" }}
-                              aria-valuenow="10"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                            <div
-                              className="progress-bar pb-step bg-danger"
-                              role="progressbar"
-                              style={{ width: "10%" }}
-                              aria-valuenow="10"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                            <div
-                              className="progress-bar pb-step bg-warning"
-                              role="progressbar"
-                              style={{ width: "10%" }}
-                              aria-valuenow="10"
-                              aria-valuemin="0"
-                              aria-valuemax="100"
-                            ></div>
-                          </div>
-                        </td>
-                      </tr>
-                    </tfoot>
-                  </table>
-                </div>
-              </div>
+              {(() => {
+                if (selectedState) {
+                  if (selectedBorough) {
+                    return filteredList2.map((element, index) => (
+                      <CoordinatorFilter {...element} key={index} />
+                    ));
+                  }
+                  return filteredList.map((element, index) => (
+                    <CoordinatorFilter {...element} key={index} />
+                  ));
+                } else {
+                  return <CoordinatorCard searchResults={searchResults} />;
+                }
+              })()}
             </div>
           </div>
         </section>
