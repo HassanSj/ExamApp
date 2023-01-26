@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
-import Navbar from "./Navbar";
-import img from "../img/profile-img.jpg";
+import Navbar from "../Navbar";
+import img from "../../img/profile-img.jpg";
 import CoordinatorCard from "./CoordinatorList";
 import CoordinatorFilter from "./CoordinatorFilter";
 import CoordinatorSearch from "./CordinatorSearch";
@@ -59,6 +59,7 @@ function Coordinator() {
       },
       Wallet: 23150.21,
       Record: "Records",
+      Date: 23 + "/" + 12 + "/" + 2012,
       AllEarnings: 100231.32,
       CashOut: 100232321.32,
     },
@@ -96,6 +97,7 @@ function Coordinator() {
       },
       Wallet: 23150.21,
       Record: "Records",
+      Date: 23 + "/" + 12 + "/" + 2012,
       AllEarnings: 100231.32,
       CashOut: 100232321.32,
     },
@@ -133,6 +135,7 @@ function Coordinator() {
       },
       Wallet: 90150.21,
       Record: "Records",
+      Date: 23 + "/" + 12 + "/" + 2012,
       AllEarnings: 12231.32,
       CashOut: 199321.32,
     },
@@ -170,6 +173,7 @@ function Coordinator() {
       },
       Wallet: 230.21,
       Record: "Records",
+      Date: 23 + "/" + 12 + "/" + 2012,
       AllEarnings: 90231.32,
       CashOut: 1032321.32,
     },
@@ -207,6 +211,7 @@ function Coordinator() {
       },
       Wallet: 230.21,
       Record: "Records",
+      Date: 23 + "/" + 12 + "/" + 2012,
       AllEarnings: 1002.32,
       CashOut: 100221.32,
     },
@@ -244,6 +249,7 @@ function Coordinator() {
       },
       Wallet: 3150.21,
       Record: "Records",
+      Date: 23 + "/" + 12 + "/" + 2012,
       AllEarnings: 200231.32,
       CashOut: 1002321.32,
     },
@@ -281,15 +287,31 @@ function Coordinator() {
       },
       Wallet: 150.21,
       Record: "Records",
+      Date: 23 + "/" + 12 + "/" + 2012,
       AllEarnings: 100231.32,
       CashOut: 100232321.32,
     },
   ]);
+  const options = [
+    "high performance",
+    "percentage of enrollment",
+    "low performance ",
+    "date joined",
+    "all earnings",
+    "milestones",
+    "waiting to cash out",
+  ];
   const [selectedState, setSelectedState] = useState();
   const [selectedBorough, setSelectedBorough] = useState();
   const [searchResults, setSearchResults] = useState([]);
   const [allResult, setallResult] = useState("All States");
-
+  const [highperformance, setHighPerformance] = useState();
+  const [enrollment, setenrollment] = useState();
+  const [lowperformance, setLowPerformance] = useState();
+  const [datejoined, setDate] = useState();
+  const [allearnings, setEarnings] = useState();
+  const [milestones, setMilestones] = useState();
+  const [cashout, setCashOut] = useState();
   useEffect(() => {
     setSearchResults(data);
   }, ["Data Filtered"]);
@@ -329,6 +351,13 @@ function Coordinator() {
     console.log(event.target.value);
 
     setSelectedBorough(event.target.value);
+  }
+  function handleoptionevent(event) {
+    console.log(event.target.value);
+    if (event.target.value === data.datejoined) {
+      return data.filter((item) => event.target.value === data.datejoined);
+    }
+    setHighPerformance(event.target.value);
   }
   return (
     <>
@@ -469,35 +498,30 @@ function Coordinator() {
             <div className="col-lg-1 d-flex">
               <div className="add-button-form d-flex align-items-center">
                 <div className="dropdown">
-                  <button
-                    className="btn sort-btn dropdown-toggle"
-                    type="button"
-                    id="dropdownMenuButton1"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
+                  <select
+                    id="inputState"
+                    class="form-select"
+                    onChange={handleoptionevent}
                   >
-                    Sort
-                  </button>
-                  <ul
+                    {options.map(function (employee, key) {
+                      return <option key={key}>{employee}</option>;
+                    })}
+                  </select>
+                  {/* <ul
                     className="dropdown-menu"
                     aria-labelledby="dropdownMenuButton1"
+                    
                   >
-                    <li>
-                      <a className="dropdown-item" href="#">
-                        Action
-                      </a>
-                    </li>
-                    <li>
-                      <a className="dropdown-item" href="#">
-                        Another action
-                      </a>
-                    </li>
-                    <li>
-                      <a className="dropdown-item" href="#">
-                        Something else here
-                      </a>
-                    </li>
-                  </ul>
+                    {options.map((items, index) => (
+                      <>
+                        <li key={index}>
+                          <a className="dropdown-item" href="#">
+                            {items}
+                          </a>
+                        </li>
+                      </>
+                    ))}
+                  </ul> */}
                 </div>
               </div>
             </div>

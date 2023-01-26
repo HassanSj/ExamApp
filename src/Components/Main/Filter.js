@@ -1,4 +1,4 @@
-import "./Navbar.css";
+import "../Navbar.css";
 
 const Filter = ({ Name, State, Borough, Staff, Students }) => {
   return (

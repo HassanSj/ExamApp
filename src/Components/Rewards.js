@@ -83,10 +83,8 @@ function Rewards() {
               {/* End Profile Nav */}
             </ul>
           </nav>
-          {/* End Icons Navigation */}
         </header>
-        {/* End Header */}
-        {/* ======= Sidebar ======= */}
+
         <Navbar />
         <main id="main" className="main">
           <div className="pagetitle">

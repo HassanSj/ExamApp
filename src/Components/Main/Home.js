@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
-import Navbar from "./Navbar";
-import Footer from "./Footer";
+import Navbar from "../Navbar";
+import Footer from "../Footer";
 import SearchBar from "./SearchBar";
 import SchoolCard from "./Listing";
-import img from "../img/profile-img.jpg";
+import img from "../../img/profile-img.jpg";
 import "./Modal3.css";
 import { Modal, Button, Form } from "react-bootstrap";
 import Container from "react-bootstrap/Container";

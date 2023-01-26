@@ -1,0 +1,5 @@
+export const ActionTypes = {
+  SELECT_STATE: "SET_STATE",
+  SELECT_BOROUGH: "SET_BOROUGH",
+  SET_LISTENER: "SET_LISTENER",
+};
