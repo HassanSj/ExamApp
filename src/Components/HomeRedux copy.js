@@ -1,41 +1,33 @@
-import { useEffect } from "react";
-import { useState } from "react";
-import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 
-import {
-  checklistener,
-  statelistener,
-  apiresponse,
-} from "../Redux/Actions/ActionFile";
+import { checklistener, statelistener } from "../Redux/Actions/ActionFile";
 
 function HomeRedux() {
   const [response, setResponse] = useState();
+
+  const res = fetch(
+    "https://fakestoreapi.com/products/1",
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    },
+    console.log(res),
+    setResponse(res)
+  );
+
+  const biodata = [
+    {
+      id: 1,
+      name: "hassanupdated",
+      fathername: "sajjadupdated",
+      designation: "manager",
+    },
+  ];
   const dispatch = useDispatch();
-  const data = useSelector((initialevent) => initialevent.apiresponse);
-  //console.log(data);
-  async function fetchData() {
-    try {
-      const api = await axios.get("https://fakestoreapi.com/products/1");
-      console.log(api.data);
-      setResponse(api.data);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-  // const apiresult = () => {
-  //   fetch("https://fakestoreapi.com/products/1")
-  //     .then((response) => response.json())
-  //     .then((data) => setResponse(data));
-  // };
-  //console.log("The Api Resultant Array is " + apiresult);
-  // const res = fetch("https://fakestoreapi.com/products/1", {
-  //   method: "GET",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //   },
-  // });
-  // console.log(res);
+  const data = useSelector((initialevent) => initialevent.statecheck);
+  console.log(data);
   function handleCategoryChange(event) {
     console.log(event.target.value);
     dispatch(checklistener(event.target.value));
@@ -45,19 +37,10 @@ function HomeRedux() {
 
     console.log(data);
   }
-  useEffect(() => {
-    fetchData();
-  }, []);
   const Name = "Schools Name Changed";
   return (
     <>
-      <h1>User List</h1>
-
       <h1>React Testing Listener</h1>
-      <ul>
-        {response &&
-          response?.data?.map((option, index) => <li key={index}>{option}</li>)}
-      </ul>
       <select onChange={handleCategoryChange}>
         <option value="red">Red</option>
         <option value="green">Green</option>
@@ -67,7 +50,7 @@ function HomeRedux() {
 
       <button
         onClick={() => {
-          dispatch(statelistener(setResponse));
+          dispatch(statecheck(setResponse));
         }}
       >
         dispatch

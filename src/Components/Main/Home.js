@@ -332,6 +332,21 @@ function Home() {
     console.log(datareceive);
   };
 
+  //...................... FIRABSE DATA GOES HERE ......................//
+  async function fetchSchools() {
+    try {
+      const response = await axios.get(
+        "https://jsonplaceholder.typicode.com/users"
+      );
+      setUser(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, []);
   useEffect(() => {
     setSearchResults(data);
   }, ["Data Filtered"]);
@@ -485,6 +500,7 @@ function Home() {
                     })}
                   </select>
                 </li>
+
                 <li>
                   <select
                     id="inputState"
