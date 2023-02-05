@@ -1,5 +1,5 @@
-import Footer from "./Footer";
-import Navbar from "./Navbar";
+import Footer from "./Footer/Footer";
+import Navbar from "./Navbar/Navbar";
 import img from "../img/profile-img.jpg";
 function Security() {
   return (

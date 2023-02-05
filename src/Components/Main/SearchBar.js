@@ -1,18 +1,24 @@
-const SearchBar = ({ data, setSearchResults }) => {
+import { useEffect } from "react";
+
+const SearchBar = ({ school, setSearchResults }) => {
   const handleSubmit = (e) => e.preventDefault();
 
   const handleSearchChange = (e) => {
-    if (!e.target.value) return setSearchResults(data);
+    if (!e.target.value) return setSearchResults(school);
 
-    const resultsArray = data.filter(
+    const resultsArray = school.filter(
       (post) =>
-        post.Name.includes(e.target.value) ||
-        post.State.SName.includes(e.target.value) ||
-        post.Borough.includes(e.target.value)
+        post.name.includes(e.target.value) ||
+        post.state.includes(e.target.value) ||
+        post.borough.includes(e.target.value)
     );
 
     setSearchResults(resultsArray);
   };
+
+  useEffect(() => {
+    setSearchResults(school);
+  }, []);
 
   return (
     <form

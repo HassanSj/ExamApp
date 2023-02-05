@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useMemo, useRef } from "react";
-import Navbar from "../Navbar";
-import Footer from "../Footer";
+import { firestore as db } from "../firebase.config";
+import firebase from "../firebase.config";
+import Navbar from "../Navbar/Navbar";
+import Footer from "../Footer/Footer";
 import SearchBar from "./SearchBar";
 import SchoolCard from "./Listing";
 import img from "../../img/profile-img.jpg";
@@ -12,7 +14,6 @@ import Filter from "./Filter";
 
 function Home() {
   const [show, setShow] = useState(false);
-
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const name = useRef();
@@ -286,9 +287,12 @@ function Home() {
       },
     },
   ]);
-
+  const [school, setSchools] = useState([]);
+  const [coordinators, setCoordinators] = useState([]);
+  const [years, setYears] = useState([]);
   const [selectedState, setSelectedState] = useState();
   const [selectedBorough, setSelectedBorough] = useState();
+
   const [searchResults, setSearchResults] = useState([]);
   const [allResult, setallResult] = useState("All States");
 
@@ -333,47 +337,67 @@ function Home() {
   };
 
   //...................... FIRABSE DATA GOES HERE ......................//
-  async function fetchSchools() {
-    try {
-      const response = await axios.get(
-        "https://jsonplaceholder.typicode.com/users"
-      );
-      setUser(response.data);
-    } catch (error) {
-      console.error(error);
-    }
-  }
-
+  const FetchStudents = async () => {
+    db.collection("School")
+      .get()
+      .then((snapshot) => {
+        const response = snapshot.docs.map((item, index) => {
+          return item.data();
+        });
+        console.log(response);
+        setSchools(response);
+      });
+  };
+  const FetchCooordinators = async () => {
+    db.collection("Coordinator")
+      .get()
+      .then((snapshot) => {
+        const response = snapshot.docs.map((item, index) => {
+          return item.data();
+        });
+        console.log(response);
+        setCoordinators(response);
+      });
+  };
+  const FetchDetails = async () => {
+    db.collection("StudentsJoining")
+      .get()
+      .then((snapshot) => {
+        const response = snapshot.docs.map((item, index) => {
+          return item.data();
+        });
+        console.log(response);
+        setYears(response);
+      });
+  };
   useEffect(() => {
-    fetchData();
-  }, []);
-  useEffect(() => {
-    setSearchResults(data);
+    FetchStudents();
+    FetchCooordinators();
+    FetchDetails;
   }, ["Data Filtered"]);
   function getFilteredList() {
     if (!selectedState) {
-      return data;
+      return school;
     }
     //console.log(data.filter((item) => item.State.SName === selectedState));
-    return data.filter((item) => item.State.SName === selectedState);
+    return school.filter((item) => item.name === selectedState);
   }
   var filteredList = useMemo(getFilteredList, [selectedState, data]);
   function getFilteredList2() {
     if (!selectedBorough) {
-      return data;
+      return school;
     }
 
-    return data.filter(
-      (item) =>
-        item.Borough === selectedBorough && item.State.SName === selectedState
+    return school.filter(
+      (item) => item.borough === selectedBorough && item.state === selectedState
     );
   }
-  var filteredList2 = useMemo(getFilteredList2, [selectedBorough, data]);
+  var filteredList2 = useMemo(getFilteredList2, [selectedBorough, school]);
   function handleCategoryChange(event) {
     const mapEmployeeNames = () => {
-      data.map(function (employee) {
-        if (employee.State.SName === event.target.value) {
-          return employee.Borough;
+      school.map(function (employee) {
+        if (employee.state === event.target.value) {
+          return employee.borough;
         }
       });
     };
@@ -387,7 +411,7 @@ function Home() {
 
     setSelectedBorough(event.target.value);
   }
-
+  const uniqueArray = [...new Set(school)];
   return (
     <>
       <header
@@ -495,8 +519,8 @@ function Home() {
                     onChange={handleCategoryChange}
                   >
                     <option>{allResult}</option>
-                    {state.map((option, index) => {
-                      return <option key={index}>{option.statename}</option>;
+                    {uniqueArray.map((option, index) => {
+                      return <option key={index}>{option.state}</option>;
                     })}
                   </select>
                 </li>
@@ -507,9 +531,9 @@ function Home() {
                     class="form-select"
                     onChange={handleCategoryChange2}
                   >
-                    {data.map(function (employee, key) {
-                      if (employee.State.SName === selectedState) {
-                        return <option key={key}>{employee.Borough}</option>;
+                    {school.map(function (result, key) {
+                      if (result.state === selectedState) {
+                        return <option key={key}>{result.borough}</option>;
                       }
                     })}
                   </select>
@@ -517,7 +541,12 @@ function Home() {
               </ul>
             </div>
             <div className="col-lg-3 d-flex">
-              <SearchBar data={data} setSearchResults={setSearchResults} />
+              <SearchBar
+                school={school}
+                years={years}
+                coordinators={coordinators}
+                setSearchResults={setSearchResults}
+              />
             </div>
             <div className="col-lg-1 d-flex">
               <div className="add-button-form d-flex align-items-center">
@@ -561,7 +590,13 @@ function Home() {
                       <Filter {...element} key={index} />
                     ));
                   } else {
-                    return <SchoolCard searchResults={searchResults} />;
+                    return (
+                      <SchoolCard
+                        years={years}
+                        coordinators={coordinators}
+                        searchResults={school}
+                      />
+                    );
                   }
                 })()}
                 {/* {(() => {
@@ -588,78 +623,6 @@ function Home() {
                     searchResults={searchResults}
                   />
                 )} */}
-
-                {/* <div className="col-lg-4 col-6 portfolio-item filter-waiting">
-                  <ListPage searchResults={searchResults} />
-                </div>
-
-                <div className="col-lg-4 col-6 portfolio-item filter-borough">
-                  <ListPage searchResults={searchResults} />
-                </div>
-
-                <div className="col-lg-4 col-6 portfolio-item filter-borough">
-                  <ListPage searchResults={searchResults} />
-                </div>
-
-                <div className="col-lg-4 col-6 portfolio-item filter-borough">
-                  <div className="member d-flex align-items-start justify-content-between">
-                    <div className="member-info">
-                      <div className="top">
-                        <h4>School Name</h4>
-                        <span>Borough</span>
-                      </div>
-                      <div className="bottom">
-                        <h5>Cordinator Name</h5>
-                        <span>Teacher - principal - sub-techer</span>
-                        <span>0912345678</span>
-                        <span>1766354</span>
-                        <span className="orange">Rao Kashan</span>
-                        <span className="orange">Rao Kashan</span>
-                      </div>
-                    </div>
-                    <div className="table">
-                      <table className="table table-bordered">
-                        <tr>
-                          <th className="text-center" colspan="2">
-                            1st Grade
-                          </th>
-                        </tr>
-                        <tr>
-                          <td className="text-center">60</td>
-                          <td className="text-center">30</td>
-                        </tr>
-                        <tr>
-                          <th className="text-center" colspan="2">
-                            2nd Grade
-                          </th>
-                        </tr>
-                        <tr>
-                          <td className="text-center">60</td>
-                          <td className="text-center">30</td>
-                        </tr>
-                        <tr>
-                          <th className="text-center" colspan="2">
-                            3rd Grade
-                          </th>
-                        </tr>
-                        <tr>
-                          <td className="text-center">60</td>
-                          <td className="text-center">30</td>
-                        </tr>
-                      </table>
-                      <div className="text-center">
-                        <button
-                          type="button"
-                          className="btn btn-primary w-100"
-                          data-bs-toggle="modal"
-                          data-bs-target="#fullscreenModal"
-                        >
-                          View More
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div> */}
               </div>
             </div>
           </div>
@@ -669,6 +632,21 @@ function Home() {
           {filteredList.map((element, index) => (
             <Filter {...element} key={index} />
           ))}
+        </div> */}
+        {/* <h1>Data</h1>
+        <div>
+          {school &&
+            school.map((schools, index) => {
+              return (
+                <li key={index}>
+                  <li>{schools.borough}</li>
+                  <li>{schools.name}</li>
+                  <li>{schools.coordinatorID}</li>
+                  <li>{schools.schoolID}</li>
+                  <li>{schools.state}</li>
+                </li>
+              );
+            })}
         </div> */}
       </main>
       <div

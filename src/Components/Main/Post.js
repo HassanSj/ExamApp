@@ -4,12 +4,10 @@ import { Modal, Button, Form } from "react-bootstrap";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
-const Post = ({ data }) => {
+const Post = ({ school, coordinators, data }) => {
   const [show, setShow] = useState(false);
-
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
-
   const onLoginFormSubmit = (e) => {
     e.preventDefault();
     handleClose();
@@ -21,11 +19,11 @@ const Post = ({ data }) => {
         <div className="member d-flex align-items-start justify-content-between">
           <div className="member-info">
             <div className="top">
-              <h4>{data.Name}</h4>
-              <span>{data.State.SName}</span>
-              <span>{data.Borough}</span>
+              <h4>{school.name}</h4>
+              <span>{school.state}</span>
+              <span>{school.borough}</span>
             </div>
-            <div className="bottom">
+            {/* <div className="bottom">
               <h4>{data.Staff.CordinatorName}</h4>
               <span>
                 {data.Staff.TeacherName}
@@ -39,9 +37,9 @@ const Post = ({ data }) => {
               <span>{data.Staff.Contact.Mobile}</span>
               <span className="orange">Rao Kashan</span>
               <span className="orange">Rao Kashan</span>
-            </div>
+            </div> */}
           </div>
-          <div className="table">
+          {/* <div className="table">
             <table className="table table-bordered">
               <tr>
                 <th className="text-center" colspan="2">
@@ -93,7 +91,7 @@ const Post = ({ data }) => {
                 View More
               </button>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
 

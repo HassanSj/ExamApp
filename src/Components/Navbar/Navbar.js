@@ -1,4 +1,4 @@
-import "./itemStyles.css";
+import "../itemStyles.css";
 import { useState, useCallback } from "react";
 
 const Navbar = () => {

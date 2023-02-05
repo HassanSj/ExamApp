@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import Navbar from "../Navbar";
+import Navbar from "../Navbar/Navbar";
 import img from "../../img/profile-img.jpg";
 import CoordinatorCard from "./CoordinatorList";
 import CoordinatorFilter from "./CoordinatorFilter";
