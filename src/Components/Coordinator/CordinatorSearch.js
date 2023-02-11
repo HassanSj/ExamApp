@@ -1,18 +1,21 @@
-const CoordinatorSearch = ({ data, setSearchResults }) => {
+import { useEffect } from "react";
+
+const CoordinatorSearch = ({ coordinator, setSearchResults }) => {
   const handleSubmit = (e) => e.preventDefault();
 
   const handleSearchChange = (e) => {
-    if (!e.target.value) return setSearchResults(data);
+    if (!e.target.value) return setSearchResults(coordinator);
 
-    const resultsArray = data.filter(
-      (post) =>
-        post.Name.includes(e.target.value) ||
-        post.State.SName.includes(e.target.value) ||
-        post.Borough.includes(e.target.value)
+    const resultsArray = coordinator.filter((post) =>
+      post.name.includes(e.target.value)
     );
 
     setSearchResults(resultsArray);
   };
+
+  useEffect(() => {
+    setSearchResults(coordinator);
+  }, []);
 
   return (
     <form

@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
+import { firestore as db } from "../firebase.config";
+import firebase from "../firebase.config";
 import Navbar from "../Navbar/Navbar";
 import img from "../../img/profile-img.jpg";
 import CoordinatorCard from "./CoordinatorList";
@@ -301,6 +303,7 @@ function Coordinator() {
     "milestones",
     "waiting to cash out",
   ];
+  const [coordinator, setCoordinators] = useState([]);
   const [selectedState, setSelectedState] = useState();
   const [selectedBorough, setSelectedBorough] = useState();
   const [searchResults, setSearchResults] = useState([]);
@@ -312,9 +315,23 @@ function Coordinator() {
   const [allearnings, setEarnings] = useState();
   const [milestones, setMilestones] = useState();
   const [cashout, setCashOut] = useState();
+
+  const FetchCooordinators = async () => {
+    db.collection("Coordinator", "School")
+      .get()
+      .then((snapshot) => {
+        const response = snapshot.docs.map((item, index) => {
+          return item.data();
+        });
+        console.log(response);
+        setCoordinators(response);
+      });
+  };
+
   useEffect(() => {
-    setSearchResults(data);
+    FetchCooordinators();
   }, ["Data Filtered"]);
+
   function getFilteredList() {
     if (!selectedState) {
       return data;
@@ -359,6 +376,7 @@ function Coordinator() {
     }
     setHighPerformance(event.target.value);
   }
+
   return (
     <>
       <header
@@ -491,7 +509,7 @@ function Coordinator() {
             </div>
             <div className="col-lg-3 d-flex">
               <CoordinatorSearch
-                data={data}
+                coordinator={coordinator}
                 setSearchResults={setSearchResults}
               />
             </div>
@@ -557,7 +575,12 @@ function Coordinator() {
                     <CoordinatorFilter {...element} key={index} />
                   ));
                 } else {
-                  return <CoordinatorCard searchResults={searchResults} />;
+                  return (
+                    <CoordinatorCard
+                      coordinator={coordinator}
+                      searchResults={coordinator}
+                    />
+                  );
                 }
               })()}
             </div>

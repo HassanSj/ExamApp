@@ -373,7 +373,7 @@ function Home() {
   useEffect(() => {
     FetchStudents();
     FetchCooordinators();
-    FetchDetails;
+    FetchDetails();
   }, ["Data Filtered"]);
   function getFilteredList() {
     if (!selectedState) {
